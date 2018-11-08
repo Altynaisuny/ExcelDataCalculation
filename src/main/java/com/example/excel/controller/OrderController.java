@@ -21,9 +21,6 @@ import java.util.Map;
 @RestController
 public class OrderController {
 
-    @Autowired
-    private ImportExcel importService;
-
     @RequestMapping(value = "/upload")
     @ResponseBody
     public void uploadExcel(@RequestParam("file") MultipartFile file,
@@ -35,7 +32,7 @@ public class OrderController {
         //导入
         try {
             inputStream = file.getInputStream();
-            result = importService.getBankListByExcel(inputStream, fileName);
+            // TODO: 2018/11/8 调用
             inputStream.close();
         } catch (Exception e){
             e.printStackTrace();
@@ -71,9 +68,9 @@ public class OrderController {
             }
             //创建HSSFWorkbook
             List<Map> sellerList = entry.getValue();
-            CommonMethods.exportXSSFWorkbook(sheetName, title, sellerList, wb);
+            // TODO: 2018/11/8 导出
+//            exportXSSFWorkbook(sheetName, title, sellerList, wb);
         }
-
         this.setResponseHeader(response, fileName);
         OutputStream os = response.getOutputStream();
         wb.write(os);
