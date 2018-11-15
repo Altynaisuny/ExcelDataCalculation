@@ -14,9 +14,6 @@ import java.util.Map;
 @Service
 public class Director {
 
-    @Autowired
-    private ExportAbstractExcelBuilder excelBuilder;
-
     /**
      * 从excel中获取数据
      * @param inputStream
@@ -24,9 +21,10 @@ public class Director {
      * @return
      */
     public Map<String, List<Map>> getExcel(InputStream inputStream, String fileName){
-        ExcelProduct excelPart = excelBuilder.setPart(inputStream, fileName);
-        Map<String, List<Map>> resultMap = excelBuilder.buildExcel(excelPart);
-        return resultMap;
+        ExportAbstractExcelBuilder excelBuilder = new ExportAbstractExcelBuilder();
+        excelBuilder.setPart(inputStream, fileName);
+        excelBuilder.buildExcel(excelBuilder.importExcelProduct);
+        return excelBuilder.resultMap;
     }
 
     /**

@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.Map;
 
-public class ExcelProduct {
+public class ImportExcelProduct {
     private Map<String, Object> excelHeaderMap;
     private Integer sellerIndexColumn;
     private Sheet sheetExample;

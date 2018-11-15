@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,30 +18,30 @@ public class ExportAbstractExcelBuilder extends AbstractExcelBuilder {
     @Autowired
     IExcelInputBo iExcelInputBo;
     @Override
-    protected ExcelProduct setPart(InputStream inputStream, String fileName) {
+    protected void setPart(InputStream inputStream, String fileName) {
         List<Sheet> sheets = iExcelInputBo.getSheetFromStream(inputStream, fileName);
         if (CollectionUtils.isEmpty(sheets)){
-            return null;
+            return;
         }
-        ExcelProduct excelProduct = new ExcelProduct();
+        ImportExcelProduct importExcelProduct = new ImportExcelProduct();
         Sheet sheetExample = sheets.get(0);
-        excelProduct.setSheetExample(sheetExample);
+        importExcelProduct.setSheetExample(sheetExample);
         Map<String, Object> excelHeaderMap = iExcelInputBo.getExcelHeader(sheetExample);
-        excelProduct.setExcelHeaderMap(excelHeaderMap);
+        importExcelProduct.setExcelHeaderMap(excelHeaderMap);
         Integer sellerIndexColumn = iExcelInputBo.getExcelSellerIndexColumn(sheetExample);
-        excelProduct.setSellerIndexColumn(sellerIndexColumn);
-        return excelProduct;
+        importExcelProduct.setSellerIndexColumn(sellerIndexColumn);
+        super.importExcelProduct = importExcelProduct;
     }
 
     @Override
-    public Map<String, List<Map>> buildExcel(ExcelProduct excelProduct) {
+    public void buildExcel(ImportExcelProduct importExcelProduct) {
         //构建代理商
-        Integer sellerIndexColumn = excelProduct.getSellerIndexColumn();
-        Sheet sheet = excelProduct.getSheetExample();
+        Integer sellerIndexColumn = importExcelProduct.getSellerIndexColumn();
+        Sheet sheet = importExcelProduct.getSheetExample();
         Map<String, Object> sellerMap = iExcelInputBiz.buildSellerMap(sheet, sellerIndexColumn);
         //构建header
-        Map<String, Object> headerMap = excelProduct.getExcelHeaderMap();
+        Map<String, Object> headerMap = importExcelProduct.getExcelHeaderMap();
         Map<String, List<Map>> result = iExcelInputBiz.buildDataBySeller(sheet, headerMap, sellerIndexColumn);
-        return result;
+        super.resultMap = result;
     }
 }

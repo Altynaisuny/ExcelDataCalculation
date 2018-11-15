@@ -25,11 +25,9 @@ public class IExcelOutputBizImpl implements IExcelOutputBiz {
             }
         }
         buildTitle(exportExcelProduct, sheet);
-        //创建内容
+        //写入cell内容
         for (int i = 0; i < valuesList.size(); i++) {
-            //创建行
             XSSFRow row = sheet.createRow(i + 1);
-            //行数据
             Map<String, Object> rowMap = valuesList.get(i);
             //当前列索引
             int j = 0;
@@ -40,15 +38,12 @@ public class IExcelOutputBizImpl implements IExcelOutputBiz {
                     Object key = entry.getKey();
                     if (key.equals(screenEnum.getText())){
                         Object value = entry.getValue();
-                        //将内容按顺序赋给对应的列对象
                         XSSFCell contentCell = row.createCell(j);
                         if (value == null){
                             contentCell.setCellValue("");
                         } else if (value.toString().matches("^(-?\\d+)(\\.\\d+)?$")){
-                            //数值型
                             contentCell.setCellValue(Double.parseDouble(value.toString()));
                         } else {
-                            //字符型
                             contentCell.setCellValue(value.toString());
                         }
                         XSSFCellStyle normalStyle = CommonMethods.sheetStyle(wb,"normal");
@@ -56,7 +51,6 @@ public class IExcelOutputBizImpl implements IExcelOutputBiz {
                         break;
                     }
                 }
-                //列索引
                 j ++;
             }
         }
