@@ -22,8 +22,8 @@ public class Director {
      */
     public Map<String, List<Map>> getExcel(InputStream inputStream, String fileName){
         ExportAbstractExcelBuilder excelBuilder = new ExportAbstractExcelBuilder();
-        excelBuilder.setPart(inputStream, fileName);
-        excelBuilder.buildExcel(excelBuilder.importExcelProduct);
+        ImportExcelProduct importExcelProduct = excelBuilder.setPart(inputStream, fileName);
+        excelBuilder.buildExcel(importExcelProduct);
         return excelBuilder.resultMap;
     }
 

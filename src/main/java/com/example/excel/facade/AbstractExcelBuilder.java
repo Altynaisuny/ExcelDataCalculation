@@ -26,7 +26,7 @@ public abstract class AbstractExcelBuilder {
     /**
      * 设置不同部分
      */
-    protected abstract void setPart(InputStream inputStream, String fileName);
+    protected abstract ImportExcelProduct setPart(InputStream inputStream, String fileName);
     /**
      * 建造
      * @return

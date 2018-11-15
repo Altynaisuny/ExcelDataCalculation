@@ -18,19 +18,19 @@ public class ExportAbstractExcelBuilder extends AbstractExcelBuilder {
     @Autowired
     IExcelInputBo iExcelInputBo;
     @Override
-    protected void setPart(InputStream inputStream, String fileName) {
+    protected ImportExcelProduct setPart(InputStream inputStream, String fileName) {
         List<Sheet> sheets = iExcelInputBo.getSheetFromStream(inputStream, fileName);
         if (CollectionUtils.isEmpty(sheets)){
-            return;
+            return null;
         }
-        ImportExcelProduct importExcelProduct = new ImportExcelProduct();
+        ImportExcelProduct importExcelProduct = super.importExcelProduct;
         Sheet sheetExample = sheets.get(0);
         importExcelProduct.setSheetExample(sheetExample);
         Map<String, Object> excelHeaderMap = iExcelInputBo.getExcelHeader(sheetExample);
         importExcelProduct.setExcelHeaderMap(excelHeaderMap);
         Integer sellerIndexColumn = iExcelInputBo.getExcelSellerIndexColumn(sheetExample);
         importExcelProduct.setSellerIndexColumn(sellerIndexColumn);
-        super.importExcelProduct = importExcelProduct;
+        return importExcelProduct;
     }
 
     @Override
@@ -41,7 +41,6 @@ public class ExportAbstractExcelBuilder extends AbstractExcelBuilder {
         Map<String, Object> sellerMap = iExcelInputBiz.buildSellerMap(sheet, sellerIndexColumn);
         //构建header
         Map<String, Object> headerMap = importExcelProduct.getExcelHeaderMap();
-        Map<String, List<Map>> result = iExcelInputBiz.buildDataBySeller(sheet, headerMap, sellerIndexColumn);
-        super.resultMap = result;
+        super.resultMap = iExcelInputBiz.buildDataBySeller(sheet, headerMap, sellerIndexColumn);
     }
 }
