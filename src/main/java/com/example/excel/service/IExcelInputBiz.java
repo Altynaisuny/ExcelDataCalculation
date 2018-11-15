@@ -20,7 +20,6 @@ public interface IExcelInputBiz extends IExcelInfo{
      * @param sellerIndexColumn 销售商这一列
      */
     Map<String, List<Map>> buildDataBySeller(Sheet sheetExample, Map<String, Object> headerIndexMap, Integer sellerIndexColumn);
-
     /**
      * 合并数据
      * @param recentMap

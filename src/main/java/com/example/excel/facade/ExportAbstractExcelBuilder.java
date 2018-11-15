@@ -36,11 +36,13 @@ public class ExportAbstractExcelBuilder extends AbstractExcelBuilder {
 
     @Override
     public Map<String, List<Map>> buildExcel(ExcelProduct excelProduct) {
-        Map<String, Object> excelHeaderMap = excelProduct.getExcelHeaderMap();
+        //构建代理商
         Integer sellerIndexColumn = excelProduct.getSellerIndexColumn();
         Sheet sheet = excelProduct.getSheetExample();
         Map<String, Object> sellerMap = iExcelInputBiz.buildSellerMap(sheet, sellerIndexColumn);
-        Map<String, List<Map>> result = iExcelInputBiz.buildDataBySeller(sheet, sellerMap, sellerIndexColumn);
+        //构建header
+        Map<String, Object> headerMap = excelProduct.getExcelHeaderMap();
+        Map<String, List<Map>> result = iExcelInputBiz.buildDataBySeller(sheet, headerMap, sellerIndexColumn);
         return result;
     }
 }

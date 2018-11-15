@@ -2,6 +2,7 @@ package com.example.excel.controller;
 
 import com.example.excel.domain.enumeration.orderScreenEnum;
 import com.example.excel.facade.CommonMethods;
+import com.example.excel.facade.Director;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ import java.util.Map;
 @RestController
 public class OrderController {
 
+    @Autowired
+    Director directorService;
+
     @RequestMapping(value = "/upload")
     @ResponseBody
     public void uploadExcel(@RequestParam("file") MultipartFile file,
@@ -33,6 +37,7 @@ public class OrderController {
         try {
             inputStream = file.getInputStream();
             // TODO: 2018/11/8 调用
+            result = directorService.getExcel(inputStream, fileName);
             inputStream.close();
         } catch (Exception e){
             e.printStackTrace();
