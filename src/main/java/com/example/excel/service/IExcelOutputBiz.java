@@ -1,6 +1,8 @@
 package com.example.excel.service;
 
 import com.example.excel.facade.ExportExcelProduct;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.List;
@@ -12,12 +14,12 @@ public interface IExcelOutputBiz {
      * @param sheetName 销售商的名称
      * @param valuesList 该销售商的数据
      */
-    void exportSheet(ExportExcelProduct exportExcelProduct, String sheetName, List<Map> valuesList);
+    void buildSheet(ExportExcelProduct exportExcelProduct, String sheetName, List<Map> valuesList);
 
     /**
-     * 写入sheet
+     * 构建标题
      * @param exportExcelProduct
-     * @param valuesList
+     * @param sheet
      */
-    void writeSheet(ExportExcelProduct exportExcelProduct, List<Map> valuesList);
+    void buildTitle(ExportExcelProduct exportExcelProduct, Sheet sheet);
 }

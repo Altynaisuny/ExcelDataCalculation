@@ -8,10 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IExcelOutputBoImpl implements IExcelOutputBo {
 
@@ -36,11 +33,11 @@ public class IExcelOutputBoImpl implements IExcelOutputBo {
         if (CollectionUtils.isEmpty(resultMap)){
             return;
         }
-        List<Sheet> sheets = new ArrayList<>();
+        Map<String, Sheet> sheetsMap = new HashMap<>();
         resultMap.forEach((key, value)->{
             XSSFSheet sheet = workbook.createSheet(key);
-            sheets.add(sheet);
+            sheetsMap.put(key, sheet);
         });
-        exportExcelProduct.setSheetList(sheets);
+        exportExcelProduct.setSheetsMap(sheetsMap);
     }
 }

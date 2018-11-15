@@ -14,30 +14,21 @@ import java.util.Map;
 
 public class IExcelOutputBizImpl implements IExcelOutputBiz {
     @Override
-    public void exportSheet(ExportExcelProduct exportExcelProduct, String sheetName, List<Map> valuesList) {
+    public void buildSheet(ExportExcelProduct exportExcelProduct, String name, List<Map> valuesList) {
         XSSFWorkbook wb = exportExcelProduct.getXssfWorkbook();
         String[] title = exportExcelProduct.getTitle();
-        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
-        XSSFSheet sheet = wb.createSheet(sheetName);
-        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
-        XSSFRow row = sheet.createRow(0);
-        // 第四步，创建单元格样式
-        XSSFCellStyle normalStyle = CommonMethods.sheetStyle(wb,"normal");
-        XSSFCellStyle headerStyle = CommonMethods.sheetStyle(wb, "header");
-        //声明列对象
-        XSSFCell cell = null;
-
-        //创建标题
-        for (int i = 0; i < title.length; i++) {
-            cell = row.createCell(i);
-            cell.setCellValue(title[i]);
-            cell.setCellStyle(headerStyle);
-            sheet.setColumnWidth(i, 160*25);
+        Map<String, Sheet> sheetMap = exportExcelProduct.getSheetsMap();
+        XSSFSheet sheet = wb.createSheet(name);
+        for (Map.Entry<String, Sheet> entry: sheetMap.entrySet()){
+            if (entry.getKey().equals(name)){
+                sheet = (XSSFSheet) entry.getValue();
+            }
         }
+        buildTitle(exportExcelProduct, sheet);
         //创建内容
         for (int i = 0; i < valuesList.size(); i++) {
             //创建行
-            row = sheet.createRow(i + 1);
+            XSSFRow row = sheet.createRow(i + 1);
             //行数据
             Map<String, Object> rowMap = valuesList.get(i);
             //当前列索引
@@ -60,6 +51,7 @@ public class IExcelOutputBizImpl implements IExcelOutputBiz {
                             //字符型
                             contentCell.setCellValue(value.toString());
                         }
+                        XSSFCellStyle normalStyle = CommonMethods.sheetStyle(wb,"normal");
                         contentCell.setCellStyle(normalStyle);
                         break;
                     }
@@ -70,9 +62,20 @@ public class IExcelOutputBizImpl implements IExcelOutputBiz {
         }
 
     }
-
     @Override
-    public void writeSheet(ExportExcelProduct exportExcelProduct, List<Map> valuesList) {
+    public void buildTitle(ExportExcelProduct exportExcelProduct, Sheet sheet) {
+        String[] title = exportExcelProduct.getTitle();
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        XSSFRow row = (XSSFRow) sheet.createRow(0);
+        XSSFWorkbook wb = exportExcelProduct.getXssfWorkbook();
+        XSSFCellStyle headerStyle = CommonMethods.sheetStyle(wb, "header");
+        //创建标题
+        for (int i = 0; i < title.length; i++) {
+            XSSFCell cell = row.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(headerStyle);
+            sheet.setColumnWidth(i, 160*25);
+        }
     }
 
 }
